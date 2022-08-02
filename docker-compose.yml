@@ -5,43 +5,42 @@ networks:
     driver: bridge
 
 services:
-  node-exporter:
-    container_name: node-exporter
-    image: quay.io/prometheus/node-exporter:latest
-    command:
-      - "--path.procfs=/host/proc"
-      - "--path.sysfs=/host/sys"
-      - "--collector.filesystem.ignored-mount-points"
-      - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
-    ports:
-      - 9100:9100
-    expose:
-      - 9100
-    networks:
-      - mynet
-    pid: host
-    restart: unless-stopped
+  # node-exporter:
+  #   container_name: node-exporter
+  #   image: quay.io/prometheus/node-exporter:latest
+  #   command:
+  #     - "--path.procfs=/host/proc"
+  #     - "--path.sysfs=/host/sys"
+  #     - "--collector.filesystem.ignored-mount-points"
+  #     - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+  #   volumes:
+  #     - /proc:/host/proc:ro
+  #     - /sys:/host/sys:ro
+  #     - /:/rootfs:ro
+  #   ports:
+  #     - 9100:9100
+  #   expose:
+  #     - 9100
+  #   networks:
+  #     - mynet
+  #   pid: host
+  #   restart: unless-stopped
 
-  cadvisor:
-    container_name: cadvisor
-    image: gcr.io/cadvisor/cadvisor
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-      - /dev/disk/:/dev/disk:ro
-    ports:
-      - 8080:8080
-    networks:
-      - mynet
-    privileged: true
-    restart: unless-stopped
-
+  # cadvisor:
+  #   container_name: cadvisor
+  #   image: gcr.io/cadvisor/cadvisor
+  #   volumes:
+  #     - /:/rootfs:ro
+  #     - /var/run:/var/run:ro
+  #     - /sys:/sys:ro
+  #     - /var/lib/docker/:/var/lib/docker:ro
+  #     - /dev/disk/:/dev/disk:ro
+  #   ports:
+  #     - 8080:8080
+  #   networks:
+  #     - mynet
+  #   privileged: true
+  #   restart: unless-stopped
 
   prometheus:
     container_name: prometheus
@@ -50,9 +49,9 @@ services:
       - ./prometheus/:/etc/prometheus/
       - ./prometheus/data:/prometheus
     command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.enable-lifecycle'
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.enable-lifecycle"
     ports:
       - 9090:9090
     expose:
@@ -80,14 +79,10 @@ services:
     volumes:
       - ./grafana/data:/var/lib/grafana
       - ./grafana/grafana.ini:/etc/grafana/grafana.ini
-    ports: 
+    ports:
       - 3000:3000
     expose:
       - 3000
     networks:
       - mynet
     restart: always
-
-
-
-
