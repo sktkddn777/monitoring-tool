@@ -9,12 +9,17 @@ services:
     container_name: node-exporter
     image: quay.io/prometheus/node-exporter:latest
     command:
-      - '--path.rootfs=/host'
+      - "--path.procfs=/host/proc"
+      - "--path.sysfs=/host/sys"
+      - "--collector.filesystem.ignored-mount-points"
+      - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
     volumes:
-      - '/:/host:ro,rslave'
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
     ports:
       - 9100:9100
-    expose: 
+    expose:
       - 9100
     networks:
       - mynet
@@ -23,7 +28,7 @@ services:
 
   cadvisor:
     container_name: cadvisor
-    image: google/cadvisor
+    image: gcr.io/cadvisor/cadvisor
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:ro
@@ -36,6 +41,7 @@ services:
       - mynet
     privileged: true
     restart: unless-stopped
+
 
   prometheus:
     container_name: prometheus
