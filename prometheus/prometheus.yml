@@ -11,17 +11,17 @@ global:
 
 # Load and evaluate rules in this file every 'evaluation_interval' seconds.
 # rule_files:
-#   - 'alert.rules'
+  - 'alert.rules'
 # - "first.rules"
 # - "second.rules"
 
 # alert
-# alerting:
-#   alertmanagers:
-#   - scheme: http
-#     static_configs:
-#     - targets:
-#       - "alertmanager:9093"
+alerting:
+  alertmanagers:
+  - scheme: http
+    static_configs:
+    - targets:
+      - "alertmanager:9093"
 
 # A scrape configuration containing exactly one endpoint to scrape:
 # Here it's Prometheus itself.
@@ -36,14 +36,14 @@ scrape_configs:
     static_configs:
       - targets: ["localhost:9090"]
 
-  # - job_name: 'cadvisor'
-  #   static_configs:
-  #     - targets: ['cadvisor:8080']
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['cadvisor:8080']
 
-  # - job_name: 'node-exporter'
+  - job_name: 'node-exporter'
 
-  #   # Override the global default and scrape targets from this job every 5 seconds.
-  #   scrape_interval: 5s
+    # Override the global default and scrape targets from this job every 5 seconds.
+    scrape_interval: 5s
 
-  #   static_configs:
-  #     - targets: ['node-exporter:9100']
+    static_configs:
+      - targets: ['node-exporter:9100']

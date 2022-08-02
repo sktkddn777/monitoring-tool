@@ -1,10 +1,21 @@
+global:
+  slack_api_url: "https://hooks.slack.com/services/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"
+
 route:
-  receiver: 'slack'
+  receiver: "slack id"
+  group_by: ["alertname"]
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 3h
+  routes:
+    - receiver: "slack id"
+      group_wait: 10s
+      match_re:
+        service: dev
 
 receivers:
-  - name: 'slack'
-#       slack_configs:
-#           - send_resolved: true
-#             username: '<username>'
-#             channel: '#<channel-name>'
-#             api_url: '<incomming-webhook-url>'
+  - name: "slack id"
+    slack_configs:
+      - channel: ""
+        icon_emoji: ":pig:"
+        text: "summary: {{ .CommonAnnotations.summary }}\ndescription: {{ .CommonAnnotations.description }}"
